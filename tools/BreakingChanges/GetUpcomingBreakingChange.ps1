@@ -43,6 +43,28 @@ Function Test-TypeIsGenericBreakingChangeAttribute
     Return $False
 }
 
+Function Test-TypeIsGenericBreakingChangeWithVersionAttribute
+{
+    [CmdletBinding()]
+    Param(
+        [Parameter()]
+        [System.Reflection.TypeInfo[]]
+        $type
+    )
+    ForEach ($loopType in $type)
+    {
+        While ($loopType.Name -ne "Object")
+        {
+            If ($loopType.Name -eq "GenericBreakingChangeWithVersionAttribute")
+            {
+                Return $True
+            }
+            $loopType = $loopType.BaseType
+        }
+    }
+    Return $False
+}
+
 Function Get-AttributeSpecificMessage
 {
     [CmdletBinding()]
@@ -152,6 +174,143 @@ Function Find-CmdletBreakingChange
     #EndRegion
 
     Return $Result
+}
+
+Function Get-AttributeSpecificVersion {
+    [CmdletBinding()]
+    Param (
+        [Parameter()]
+        [System.Object]
+        $attribute
+    )
+    $Method = $attribute.GetType().GetMethod('GetAttributeSpecificVersion', [System.Reflection.BindingFlags]::NonPublic -bor [System.Reflection.BindingFlags]::Instance)
+    $Version = $Method.Invoke($attribute, @()).Trim()
+    Return $Version
+}
+
+Function Find-ParameterBreakingChangeVersion {
+    [CmdletBinding()]
+    Param (
+        [Parameter()]
+        [System.Management.Automation.ParameterMetadata]
+        $ParameterInfo
+    )
+
+    ForEach ($attribute In $ParameterInfo.Attributes) {
+        If (Test-TypeIsGenericBreakingChangeWithVersionAttribute $attribute.TypeId) {
+            Return Get-AttributeSpecificVersion($attribute)
+        }
+    }
+
+    Return ""
+}
+
+Function Find-OlderVersion {
+    [CmdletBinding()]
+    Param (
+        [Parameter()]
+        [String]
+        $Version1,
+        [Parameter()]
+        [String]
+        $Version2
+    )
+    if ($Version2 -eq "") {
+        return $Version1
+    }
+    if ($Version1 -eq "") {
+        return $Version2
+    }
+    $Version1Split = $Version1.Split('.')
+    $Version2Split = $Version2.Split('.')
+
+    for ($i = 0; $i -lt $Version1Split.Length; $i++) {
+        $Par1 = [int]$Version1Split[$i]
+        $Par2 = [int]$Version2Split[$i]
+
+        if ($Par1 -lt $Par2) {
+            return $Version1
+        }
+        elseif ($Par1 -gt $Par2) {
+            return $Version2
+        }
+    }
+    return $Version1
+}
+
+Function Find-CmdletBreakingChangeVersion {
+    [CmdletBinding()]
+    Param (
+        [Parameter()]
+        [System.Management.Automation.CommandInfo]
+        $CmdletInfo
+    )
+    $Result = ""
+    $customAttributes = $CmdletInfo.ImplementingType.GetTypeInfo().GetCustomAttributes([System.object], $true)
+    
+    ForEach ($customAttribute In $customAttributes) {
+        If (Test-TypeIsGenericBreakingChangeWithVersionAttribute $customAttribute.TypeId) {
+            $tmp = Get-AttributeSpecificVersion($customAttribute)
+            $Result = Find-OlderVersion($tmp, $Result)
+        }
+    }
+    #EndRegion
+
+    #Region get breaking change info of parameters
+    ForEach ($ParameterInfo In $CmdletInfo.Parameters.values) {
+        $ParameterBreakingChangeVersion = Find-ParameterBreakingChangeVersion($ParameterInfo)
+        If ("" -ne $ParameterBreakingChangeVersion) {
+            $Result = Find-OlderVersion($ParameterBreakingChangeVersion, $Result)
+        }
+    }
+    #EndRegion
+
+    Return $Result
+}
+
+Function Get-BreakingChangeVersion
+{
+    [CmdletBinding()]
+    Param (
+        [Parameter()]
+        [String]
+        $ArtifactsPath,
+        [Parameter()]
+        [String]
+        $ModuleName
+    )
+    $BreakingChangeVersion = @{}
+    $ModuleRoot = [System.IO.Path]::Combine($ArtifactsPath, $ModuleName)
+
+    # #Region Generated modules
+    # $Dlls = Get-ChildItem -Path $ModuleRoot -Filter *.private.dll -Recurse
+    # ForEach ($Dll In $Dlls)
+    # {
+    #     $CustomRoot = [System.IO.Path]::Combine($Dll, '..', '..', 'custom')
+    #     $Psm1Path = Get-ChildItem -Path $CustomRoot -Filter *.psm1
+    #     $BreakingChangeVersions = Get-BreakingChangeOfGeneratedModule -DllPath $Dll -Psm1Path $Psm1Path
+    #     $BreakingChangeMessages += $BreakingChangeMessage
+    # }
+    # #EndRegion
+
+    #Region SDK based modules
+    If (-Not (Test-Path -Path ([System.IO.Path]::Combine($ModuleRoot, "generated"))))
+    {
+        $psd1Path = [System.IO.Path]::Combine($ModuleRoot, "$ModuleName.psd1")
+        Import-Module $psd1Path
+        $ModuleInfo = Get-Module $ModuleName
+        ForEach ($cmdletInfo In $ModuleInfo.ExportedCmdlets.Values)
+        {
+            $cmdletBreakingChangeVersion = Find-CmdletBreakingChangeVersion($cmdletInfo)
+            If ($cmdletBreakingChangeVersion -ne @{})
+            {
+                $BreakingChangeVersion = Find-OlderVersion($cmdletBreakingChangeVersion, $BreakingChangeVersion)
+            }
+        }
+    }
+    #EndRegion
+
+    Return $BreakingChangeVersion
 }
 
 Function Get-BreakingChangeInfoOfModule
@@ -374,6 +533,154 @@ Function Get-BreakingChangeOfGeneratedModule
     Return $AllBreakingChangeMessages
 }
 
+# Function Get-BreakingChangeVersionOfGeneratedModule
+# {
+#     [CmdletBinding()]
+#     Param (
+#         [Parameter()]
+#         [String]
+#         $DllPath,
+#         [Parameter()]
+#         [String]
+#         $Psm1Path
+#     )
+#     $AllBreakingChangeVersion = @{}
+
+#     #Region Dll
+#     $Dll = [Reflection.Assembly]::LoadFrom($DllPath)
+#     $Cmdlets = $Dll.ExportedTypes | Where-Object { $_.CustomAttributes.Attributetype.name -contains "GeneratedAttribute" }
+
+#     $BreakingChangeCmdlets = $Cmdlets | Where-Object { Test-TypeIsGenericBreakingChangeWithVersionAttribute $_.CustomAttributes.Attributetype }
+#     ForEach ($BreakingChangeCmdlet in $BreakingChangeCmdlets)
+#     {
+#         $ParameterSetName = $BreakingChangeCmdlet.Name
+#         $CmdletAttribute = $BreakingChangeCmdlet.CustomAttributes | Where-Object { $_.AttributeType.Name -eq 'CmdletAttribute' }
+#         $Verb = $CmdletAttribute.ConstructorArguments[0].Value
+#         $Noun = $CmdletAttribute.ConstructorArguments[1].Value.Split('_')[0]
+#         $CmdletName = "$Verb-$Noun"
+
+#         $BreakingChangeAttributes = $BreakingChangeCmdlet.CustomAttributes | Where-Object { Test-TypeIsGenericBreakingChangeWithVersionAttribute $_.Attributetype }
+#         ForEach ($BreakingChangeAttribute In $BreakingChangeAttributes)
+#         {
+#             $Attribute = $BreakingChangeAttribute.Constructor.Invoke(@($BreakingChangeAttribute.ConstructorArguments.value))
+#             $BreakingChangeMessage = Get-BreakingChangeMessageFromGeneratedAttribute -Attribute $Attribute -AttributeType $Attribute.GetType()
+    
+#             If (-not $AllBreakingChangeMessages.ContainsKey($CmdletName))
+#             {
+#                 $AllBreakingChangeMessages.Add($CmdletName, @{})
+#             }
+#             If (-not $AllBreakingChangeMessages[$CmdletName].ContainsKey($ParameterSetName))
+#             {
+#                 $AllBreakingChangeMessages[$CmdletName].Add($ParameterSetName, @{
+#                     "CmdletBreakingChange" = [System.Collections.ArrayList]::New(@($BreakingChangeMessage))
+#                 })
+#             }
+#             Else {
+#                 $AllBreakingChangeMessages[$CmdletName][$ParameterSetName].Add($BreakingChangeMessage)
+#             }
+#         }
+#     }
+
+#     ForEach ($Cmdlet in $Cmdlets)
+#     {
+#         $ParameterBreakingChangeMessage = @{}
+#         $ParameterSetName = $Cmdlet.Name
+#         $CmdletAttribute = $Cmdlet.CustomAttributes | Where-Object { $_.AttributeType.Name -eq 'CmdletAttribute' }
+#         $Verb = $CmdletAttribute.ConstructorArguments[0].Value
+#         $Noun = $CmdletAttribute.ConstructorArguments[1].Value.Split('_')[0]
+#         $CmdletName = "$Verb-$Noun"
+
+#         $Parameters = $Cmdlet.DeclaredMembers | Where-Object { Test-TypeIsGenericBreakingChangeAttribute $_.CustomAttributes.Attributetype }
+#         ForEach ($Parameter In $Parameters)
+#         {
+#             $ParameterName = $Parameter.Name
+#             $ParameterAttribute = $Parameter.CustomAttributes | Where-Object { Test-TypeIsGenericBreakingChangeAttribute $_.AttributeType }
+#             $Attribute = $ParameterAttribute.Constructor.Invoke(@($ParameterAttribute.ConstructorArguments.value))
+#             $BreakingChangeMessage = Get-BreakingChangeMessageFromGeneratedAttribute -Attribute $Attribute -AttributeType $Attribute.GetType()
+#             $ParameterBreakingChangeMessage.Add($ParameterName, $BreakingChangeMessage)
+#         }
+#         If ($ParameterBreakingChangeMessage.Count -ne 0)
+#         {
+#             If (-not $AllBreakingChangeMessages.ContainsKey($CmdletName))
+#             {
+#                 $AllBreakingChangeMessages.Add($CmdletName, @{})
+#             }
+#             If (-not $AllBreakingChangeMessages[$CmdletName].ContainsKey($ParameterSetName))
+#             {
+#                 $AllBreakingChangeMessages[$CmdletName].Add($ParameterSetName, @{
+#                     "ParameterBreakingChange" = $ParameterBreakingChangeMessage
+#                 })
+#             }
+#             Else {
+#                 $AllBreakingChangeMessages[$CmdletName][$ParameterSetName].Add('ParameterBreakingChange', $ParameterBreakingChangeMessage)
+#             }
+#         }
+#     }
+#     #EndRegion
+
+#     #Region psm1
+#     Import-Module $Psm1Path -Force
+#     $ModuleName = (Get-Item $Psm1Path).BaseName
+#     $ModuleInfo = Get-Module $ModuleName
+#     $BreakingChangeCmdlets = $ModuleInfo.ExportedCommands.Values | Where-Object { Test-TypeIsGenericBreakingChangeAttribute $_.ScriptBlock.Attributes.TypeId }
+#     ForEach ($BreakingChangeCmdlet In $BreakingChangeCmdlets)
+#     {
+#         $CmdletName = $BreakingChangeCmdlet.Name
+#         $BreakingChangeAttributes = $BreakingChangeCmdlet.ScriptBlock.Attributes | Where-Object { Test-TypeIsGenericBreakingChangeAttribute $_.TypeId }
+#         ForEach ($BreakingChangeAttribute In $BreakingChangeAttributes)
+#         {
+#             $BreakingChangeMessage = Get-BreakingChangeMessageFromGeneratedAttribute -Attribute $BreakingChangeAttribute -AttributeType $BreakingChangeAttribute.TypeId
+#             If (-not $AllBreakingChangeMessages.ContainsKey($CmdletName))
+#             {
+#                 $AllBreakingChangeMessages.Add($CmdletName, @{})
+#             }
+#             If (-not $AllBreakingChangeMessages[$CmdletName].ContainsKey($AllParameterSetsName))
+#             {
+#                 $AllBreakingChangeMessages[$CmdletName].Add($AllParameterSetsName, @{
+#                     "CmdletBreakingChange" = [System.Collections.ArrayList]::New(@($BreakingChangeMessage))
+#                 })
+#             }
+#             Else {
+#                 $AllBreakingChangeMessages[$CmdletName][$AllParameterSetsName].Add($BreakingChangeMessage)
+#             }
+#         }
+#     }
+
+#     $Cmdlets = $ModuleInfo.ExportedCommands.Values
+#     ForEach ($Cmdlet In $Cmdlets)
+#     {
+#         $CmdletName = $Cmdlet.Name
+#         $ParameterBreakingChangeMessage = @{}
+#         $Parameters = $Cmdlet.Parameters.Values | Where-Object { Test-TypeIsGenericBreakingChangeAttribute $_.Attributes.TypeId }
+#         ForEach ($Parameter In $Parameters)
+#         {
+#             $ParameterName = $Parameter.Name
+#             $ParameterAttribute = $Parameter.Attributes | Where-Object { Test-TypeIsGenericBreakingChangeAttribute $_.TypeId }
+#             $BreakingChangeMessage = Get-BreakingChangeMessageFromGeneratedAttribute -Attribute $ParameterAttribute -AttributeType $ParameterAttribute.TypeId
+#             $ParameterBreakingChangeMessage.Add($ParameterName, $BreakingChangeMessage)
+#         }
+#         If ($ParameterBreakingChangeMessage.Count -ne 0)
+#         {
+#             If (-not $AllBreakingChangeMessages.ContainsKey($CmdletName))
+#             {
+#                 $AllBreakingChangeMessages.Add($CmdletName, @{})
+#             }
+#             If (-not $AllBreakingChangeMessages[$CmdletName].ContainsKey($AllParameterSetsName))
+#             {
+#                 $AllBreakingChangeMessages[$CmdletName].Add($AllParameterSetsName, @{
+#                     "ParameterBreakingChange" = $ParameterBreakingChangeMessage
+#                 })
+#             }
+#             Else {
+#                 $AllBreakingChangeMessages[$CmdletName][$AllParameterSetsName].Add('ParameterBreakingChange', $ParameterBreakingChangeMessage)
+#             }
+#         }
+#     }
+#     #EndRegion
+
+#     Return $AllBreakingChangeMessages
+# }
+
 Function Merge-BreakingChangeInfoOfModule
 {
     [CmdletBinding()]
@@ -578,7 +885,10 @@ Function Export-BreakingChangeMessageOfModule
         $ArtifactsPath,
         [Parameter()]
         [String]
-        $ModuleName
+        $ModuleName,
+        [Parameter()]
+        [String]
+        $NextBreakingChangeVersion
     )
     $ModuleBreakingChangeInfo = Get-BreakingChangeInfoOfModule -ModuleName $ModuleName -ArtifactsPath $ArtifactsPath
     $ModuleBreakingChangeInfo = Merge-BreakingChangeInfoOfModule -ModuleBreakingChangeInfo $ModuleBreakingChangeInfo
@@ -586,7 +896,7 @@ Function Export-BreakingChangeMessageOfModule
     {
         Return ""
     }
-    $Result = "`n## $ModuleName`n"
+    $Result = "`n## $ModuleName $NextBreakingChangeVersion`n"
 
     ForEach ($CmdletName In ($ModuleBreakingChangeInfo.Keys | Sort-Object))
     {
@@ -612,7 +922,8 @@ Function Export-AllBreakingChangeMessageUnderArtifacts
     $AllModuleList = Get-ChildItem -Path $ArtifactsPath -Filter Az.* | ForEach-Object { $_.Name }
     ForEach ($ModuleName In $AllModuleList)
     {
-        $Result += Export-BreakingChangeMessageOfModule -ArtifactsPath $ArtifactsPath -ModuleName $ModuleName
+        $NextBreakingChangeVersion = Get-BreakingChangeVersion -ModuleName $ModuleName -ArtifactsPath $ArtifactsPath
+        $Result += Export-BreakingChangeMessageOfModule -ArtifactsPath $ArtifactsPath -ModuleName $ModuleName -NextBreakingChangeVersion $NextBreakingChangeVersion
     }
     $Result | Out-File -FilePath $MarkdownPath -Force
 }

@@ -20,7 +20,6 @@ using Microsoft.Azure.Commands.Synapse.Models;
 using Microsoft.Azure.Commands.Synapse.Properties;
 using Microsoft.Azure.Management.Internal.Resources.Utilities.Models;
 using Microsoft.Azure.Management.Synapse.Models;
-using Microsoft.WindowsAzure.Commands.Common.CustomAttributes;
 using Microsoft.WindowsAzure.Commands.Utilities.Common;
 using System.Collections;
 using System.IO;
@@ -131,11 +130,6 @@ namespace Microsoft.Azure.Commands.Synapse
         public string SparkVersion { get; set; }
 
         [Parameter(ValueFromPipelineByPropertyName = false, Mandatory = false,
-            HelpMessage = HelpMessages.SparkConfigPropertiesFilePath)]
-        [ValidateNotNullOrEmpty]
-        public string SparkConfigFilePath { get; set; }
-
-        [Parameter(ValueFromPipelineByPropertyName = false, Mandatory = false,
           HelpMessage = HelpMessages.SparkConfigurationResource)]
         public PSSparkConfigurationResource SparkConfiguration { get; set; }
 
@@ -194,16 +188,6 @@ namespace Microsoft.Azure.Commands.Synapse
             }
 
             SparkConfigProperties sparkConfigProperties = null;
-            if (this.IsParameterBound(c => c.SparkConfigFilePath))
-            {
-                string path = this.TryResolvePath(SparkConfigFilePath);
-                string filename = Path.GetFileNameWithoutExtension(path);
-                sparkConfigProperties = new SparkConfigProperties()
-                {
-                    Content = this.ReadFileAsText(this.SparkConfigFilePath),
-                    Filename = filename
-                };
-            }
 
             if (this.IsParameterBound(c => c.SparkConfiguration))
             {

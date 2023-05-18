@@ -21,7 +21,7 @@ Set-AzApplicationGatewayBackendAddressPool -ApplicationGateway <PSApplicationGat
 
 ## DESCRIPTION
 The **Set-AzApplicationGatewayBackendAddressPool** cmdlet updates a back-end address pool for an Azure application gateway.
-Back-end addresses can be specified as IP addresses, fully-qualified domain names (FQDN) or IP configurations IDs.
+Back-end addresses can be specified as IP addresses or fully-qualified domain names (FQDN).
 
 ## EXAMPLES
 
@@ -153,7 +153,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

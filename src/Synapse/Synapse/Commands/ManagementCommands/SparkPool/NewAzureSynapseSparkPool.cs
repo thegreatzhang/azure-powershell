@@ -130,7 +130,6 @@ namespace Microsoft.Azure.Commands.Synapse
         [ValidateNotNullOrEmpty]
         public string SparkVersion { get; set; }
 
-        [CmdletParameterBreakingChange("SparkConfigFilePath", ReplaceMentCmdletParameterName = "SparkConfiguration")]
         [Parameter(ValueFromPipelineByPropertyName = false, Mandatory = false,
             HelpMessage = HelpMessages.SparkConfigPropertiesFilePath)]
         [ValidateNotNullOrEmpty]

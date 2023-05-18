@@ -295,11 +295,9 @@ namespace Microsoft.Azure.Commands.HDInsight
         [Parameter(HelpMessage = "Gets or sets the public key to be used for SSH.")]
         public string SshPublicKey { get; set; }
 
-        [CmdletParameterBreakingChange("RdpCredential", ChangeDescription = "This parameter is being deprecated.")]
         [Parameter(HelpMessage = "Gets or sets the credential for RDP access to the cluster.")]
         public PSCredential RdpCredential { get; set; }
 
-        [CmdletParameterBreakingChange("RdpAccessExpiry", ChangeDescription = "This parameter is being deprecated.")]
         [Parameter(HelpMessage = "Gets or sets the expiry DateTime for RDP access on the cluster.")]
         public DateTime RdpAccessExpiry { get; set; }
 

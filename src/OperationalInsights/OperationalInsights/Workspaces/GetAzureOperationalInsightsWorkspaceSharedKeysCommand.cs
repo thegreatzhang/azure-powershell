@@ -19,7 +19,6 @@ using System.Management.Automation;
 
 namespace Microsoft.Azure.Commands.OperationalInsights
 {
-    [GenericBreakingChange("Get-AzOperationalInsightsWorkspaceSharedKeys alias will be removed in an upcoming breaking change release")]
     [Cmdlet("Get", ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "OperationalInsightsWorkspaceSharedKey"), OutputType(typeof(PSWorkspaceKeys))]
     [Alias("Get-AzOperationalInsightsWorkspaceSharedKeys")]
     public class GetAzureOperationalInsightsWorkspaceSharedKeysCommand : OperationalInsightsBaseCmdlet

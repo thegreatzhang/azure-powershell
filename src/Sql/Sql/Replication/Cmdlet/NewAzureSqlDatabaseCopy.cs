@@ -32,10 +32,7 @@ namespace Microsoft.Azure.Commands.Sql.Replication.Cmdlet
     /// <summary>
     /// Cmdlet to create a new Azure SQL Database Copy
     /// </summary>
-    [CmdletOutputBreakingChange(
-        deprecatedCmdletOutputTypeName: typeof(AzureSqlDatabaseCopyModel),
-        DeprecatedOutputProperties = new String[] { "BackupStorageRedundancy" },
-        NewOutputProperties = new String[] { "CurrentBackupStorageRedundancy", "RequestedBackupStorageRedundancy" })]
+    
     [Cmdlet("New", ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "SqlDatabaseCopy", ConfirmImpact = ConfirmImpact.Low, SupportsShouldProcess = true, DefaultParameterSetName = DtuDatabaseParameterSet), OutputType(typeof(AzureSqlDatabaseCopyModel))]
     public class NewAzureSqlDatabaseCopy : AzureSqlDatabaseCopyCmdletBase
     {

@@ -21,7 +21,6 @@ using Microsoft.WindowsAzure.Commands.Common.CustomAttributes;
 
 namespace Microsoft.Azure.Commands.OperationalInsights.Clusters
 {
-    [CmdletOutputBreakingChange(typeof(PSCluster), DeprecatedOutputProperties = new String[] { "NextLink", "Sku" })]
     [Cmdlet("Get", ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "OperationalInsightsCluster", DefaultParameterSetName = ListParameterSet), OutputType(typeof(PSCluster))]
     public class GetAzureOperationalInsightsClusterCommand : OperationalInsightsBaseCmdlet
     {

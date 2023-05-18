@@ -31,7 +31,6 @@ namespace Microsoft.Azure.Commands.SqlVirtualMachine.SqlVirtualMachine.Cmdlet
     /// This class implements the New-AzSqlVM cmdlet. It creates a new instance of an Azure Sql Virtual machine and returns its information to the powershell
     /// user as a AzureSqlVMModel object.
     /// </summary>
-    [CmdletOutputBreakingChange(typeof(AzureSqlVMModel), DeprecatedOutputProperties = new String[] { "SqlManagementType" })]
     [Cmdlet(VerbsCommon.New, ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "SqlVM", DefaultParameterSetName = NameParameterList, SupportsShouldProcess = true)]
     [OutputType(typeof(AzureSqlVMModel))]
     public class NewAzureSqlVM : AzureSqlVMUpsertCmdletBase
@@ -68,8 +67,6 @@ namespace Microsoft.Azure.Commands.SqlVirtualMachine.SqlVirtualMachine.Cmdlet
         /// <summary>
         /// Sql virtual machine to be updated
         /// </summary>
-        [CmdletParameterBreakingChange("SqlManagementType", ChangeDescription = "SqlManagementType parameter is being deprecated")]
-        [CmdletParameterBreakingChange("SqlVM", ChangeDescription = "SqlVM parameter is being deprecated without being replaced.")]
         [Parameter(Mandatory = true,
             ParameterSetName = NameInputObject,
             ValueFromPipeline = true,

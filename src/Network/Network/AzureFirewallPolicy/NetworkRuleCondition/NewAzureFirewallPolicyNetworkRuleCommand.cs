@@ -38,10 +38,7 @@ namespace Microsoft.Azure.Commands.Network
         [ValidateNotNullOrEmpty]
         public string Description { get; set; }
 
-        [CmdletParameterBreakingChange(
-            "SourceAddress",
-            ChangeDescription = "This parameter is becoming optional as SourceIpGroup can be provided without this.",
-            IsBecomingMandatory = false)]
+        
         [Parameter(
             Mandatory = true,
             ParameterSetName = AzureFirewallPolicyRuleSourceParameterSets.SourceAddress,

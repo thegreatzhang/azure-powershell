@@ -19,7 +19,6 @@ using Microsoft.WindowsAzure.Commands.Common.CustomAttributes;
 
 namespace Microsoft.Azure.Commands.ContainerRegistry
 {
-    [GenericBreakingChange("The Az.ContainerRegistry module is upgrading. The output properties may have some changes", "4.0.0.0")]
     [Cmdlet("Test", ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "ContainerRegistryNameAvailability")]
     [OutputType(typeof(RegistryNameStatus))]
     public class TestAzureContainerRegistryNameAvailability : ContainerRegistryCmdletBase

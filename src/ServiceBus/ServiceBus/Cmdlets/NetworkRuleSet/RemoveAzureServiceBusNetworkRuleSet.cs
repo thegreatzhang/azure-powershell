@@ -22,7 +22,6 @@ namespace Microsoft.Azure.Commands.ServiceBus.Commands.NetworkruleSet
     /// <summary>
     /// 'Remove-AzureRmEventHub' Cmdlet removes the specified EventHub
     /// </summary>
-    [GenericBreakingChange("This cmdlet would be deprecated in a future release. Please use Set-AzServiceBusNetworkRuleSet.")]
     [Cmdlet("Remove", ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "ServiceBusNetworkRuleSet", DefaultParameterSetName = NetworkRuleSetPropertiesParameterSet, SupportsShouldProcess = true), OutputType(typeof(bool))]
     public class RemoveAzureServiceBusNetworkRuleSet : AzureServiceBusCmdletBase
     {

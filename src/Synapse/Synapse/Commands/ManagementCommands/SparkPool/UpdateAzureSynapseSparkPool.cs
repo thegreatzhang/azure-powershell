@@ -143,7 +143,6 @@ namespace Microsoft.Azure.Commands.Synapse
             HelpMessage = HelpMessages.LibraryRequirementsFilePath)]
         public string LibraryRequirementsFilePath { get; set; }
 
-        [CmdletParameterBreakingChange("SparkConfigFilePath", ReplaceMentCmdletParameterName = "SparkConfiguration")]
         [Parameter(ValueFromPipelineByPropertyName = false, Mandatory = false,
            HelpMessage = HelpMessages.SparkConfigPropertiesFilePath)]
         public string SparkConfigFilePath { get; set; }

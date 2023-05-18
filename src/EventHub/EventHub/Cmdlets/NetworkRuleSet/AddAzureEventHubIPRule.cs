@@ -23,7 +23,6 @@ namespace Microsoft.Azure.Commands.EventHub.Commands.EventHub
     /// <summary>
     /// 'New-AzureRmEventHubIpfilterRule' Cmdlet creates a new IPFilterRule
     /// </summary>
-    [GenericBreakingChange("This cmdlet would be deprecated in a future release. Please use Set-AzEventHubNetworkRuleSet.")]
     [Cmdlet("Add", ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "EventHubIPRule", DefaultParameterSetName = IPRulePropertiesParameterSet, SupportsShouldProcess = true), OutputType(typeof(PSNetworkRuleSetAttributes))]
     public class AddAzureEventHubIPRule : AzureEventHubsCmdletBase
     {

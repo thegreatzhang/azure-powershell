@@ -14,7 +14,6 @@ using Microsoft.WindowsAzure.Commands.Common.CustomAttributes;
 
 namespace Microsoft.Azure.Commands.Network
 {
-    [CmdletDeprecation(ReplacementCmdletName = "Get-AzRouteServerPeerAdvertisedRoute")]
     [Cmdlet(VerbsCommon.Get, ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "VirtualRouterPeerAdvertisedRoute", DefaultParameterSetName = VirtualRouterPeerParameterSetNames.ByVirtualRouterPeerName), OutputType(typeof(PSPeerRoute))]
     public class GetVirtualRouterPeerAdvertisedRouteCommand : NetworkBaseCmdlet
     {

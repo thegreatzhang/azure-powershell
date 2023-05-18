@@ -19,7 +19,6 @@ using Microsoft.WindowsAzure.Commands.Common.CustomAttributes;
 
 namespace Microsoft.Azure.Commands.ContainerRegistry
 {
-    [GenericBreakingChange("The Az.ContainerRegistry module is upgrading. The output properties may have some changes", "4.0.0.0")]
     [Cmdlet("Get", ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "ContainerRegistryCredential", DefaultParameterSetName = NameResourceGroupParameterSet)]
     [OutputType(typeof(PSContainerRegistryCredential))]
     public class GetAzureContainerRegistryCredential : ContainerRegistryCmdletBase

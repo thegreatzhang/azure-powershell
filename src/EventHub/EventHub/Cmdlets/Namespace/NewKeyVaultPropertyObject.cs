@@ -23,7 +23,6 @@ using System.Text;
 
 namespace Microsoft.Azure.Commands.EventHub.Cmdlets.Namespace
 {
-    [GenericBreakingChange("Output type of the cmdlet would change to `Microsoft.Azure.PowerShell.Cmdlets.EventHub.Models.Api202201Preview.KeyVaultProperties`.", deprecateByVersion: DeprecateByVersion, changeInEfectByDate: ChangeInEffectByDate)]
     [Cmdlet("New", ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "EventHubEncryptionConfig", SupportsShouldProcess = false), OutputType(typeof(PSEncryptionConfigAttributes))]
     public class NewKeyVaultPropertyObject : AzureEventHubsCmdletBase
     {

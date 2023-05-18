@@ -24,7 +24,6 @@ namespace Microsoft.Azure.Commands.SignalR.Cmdlets
 {
     [Cmdlet("Get", ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "SignalR", DefaultParameterSetName = ListSignalRServiceParameterSet)]
     [OutputType(typeof(PSSignalRResource))]
-    [CmdletOutputBreakingChange(typeof(PSSignalRResource), DeprecatedOutputProperties = new String[] { nameof(PSSignalRResource.HostNamePrefix) })]
     public class GetAzureRmSignalR : SignalRCmdletBase, IWithResourceId
     {
         [Parameter(

@@ -52,7 +52,6 @@ namespace Microsoft.Azure.Commands.SqlVirtualMachine.SqlVirtualMachine.Cmdlet
         /// <summary>
         /// SqlVmGroup Object of the AG Listener
         /// </summary>
-        [CmdletParameterBreakingChange("SqlVMGroupObject", ChangeDescription = "SqlVMGroupObject parameter is being deprecated without being replaced.")]
         [Parameter(
             Mandatory = true,
             ParameterSetName = ParameterSet.SqlVMGroupObject,

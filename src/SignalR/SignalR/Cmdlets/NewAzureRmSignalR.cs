@@ -28,7 +28,6 @@ namespace Microsoft.Azure.Commands.SignalR.Cmdlets
 {
     [Cmdlet("New", ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "SignalR", SupportsShouldProcess = true)]
     [OutputType(typeof(PSSignalRResource))]
-    [CmdletOutputBreakingChange(typeof(PSSignalRResource), DeprecatedOutputProperties = new String[] { nameof(PSSignalRResource.HostNamePrefix) })]
     public sealed class NewAzureRmSignalR : SignalRCmdletBase
     {
         private const string DefaultSku = "Standard_S1";

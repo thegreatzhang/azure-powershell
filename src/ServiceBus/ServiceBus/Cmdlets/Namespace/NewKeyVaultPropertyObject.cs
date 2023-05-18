@@ -23,7 +23,6 @@ using System.Text;
 
 namespace Microsoft.Azure.Commands.ServiceBus.Cmdlets.Namespace
 {
-    [GenericBreakingChange("Output type of the cmdlet would change to `Microsoft.Azure.PowerShell.Cmdlets.ServiceBus.Models.Api202210Preview.KeyVaultProperties`.", deprecateByVersion: DeprecateByVersion, changeInEfectByDate: ChangeInEffectByDate)]
     [Cmdlet("New", ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "ServiceBusEncryptionConfig"), OutputType(typeof(PSEncryptionConfigAttributes))]
     public class NewKeyVaultPropertyObject : AzureServiceBusCmdletBase
     {

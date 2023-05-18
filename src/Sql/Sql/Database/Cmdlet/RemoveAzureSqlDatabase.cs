@@ -22,10 +22,7 @@ using System.Management.Automation;
 
 namespace Microsoft.Azure.Commands.Sql.Database.Cmdlet
 {
-    [CmdletOutputBreakingChange(
-        deprecatedCmdletOutputTypeName: typeof(AzureSqlDatabaseModel),
-        DeprecatedOutputProperties = new String[] { "BackupStorageRedundancy" },
-        NewOutputProperties = new String[] { "CurrentBackupStorageRedundancy", "RequestedBackupStorageRedundancy" })]
+  
     [Cmdlet("Remove", ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "SqlDatabase", SupportsShouldProcess = true), OutputType(typeof(AzureSqlDatabaseModel))]
     public class RemoveAzureSqlDatabase : AzureSqlDatabaseCmdletBase<IEnumerable<AzureSqlDatabaseModel>>
     {

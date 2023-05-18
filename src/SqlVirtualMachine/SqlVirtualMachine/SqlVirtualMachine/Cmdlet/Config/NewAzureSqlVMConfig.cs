@@ -28,7 +28,6 @@ namespace Microsoft.Azure.Commands.SqlVirtualMachine.SqlVirtualMachine.Cmdlet.Co
     /// This class implements the New-AzVMConfig cmdlet. It will create a local AzureSqlVMModel powershell object that can be used as configuration settings 
     /// for the creation of a sql virtual machine on Azure.
     /// </summary>
-    [CmdletDeprecation()]
     [Cmdlet(VerbsCommon.New, ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "SqlVMConfig", DefaultParameterSetName = NameParameterList, SupportsShouldProcess = true)]
     [OutputType(typeof(AzureSqlVMModel))]
     public class NewAzureSqlVMConfig : AzureSqlVMUpsertCmdletBase

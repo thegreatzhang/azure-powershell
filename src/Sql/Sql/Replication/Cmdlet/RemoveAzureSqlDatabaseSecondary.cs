@@ -21,10 +21,7 @@ using System.Management.Automation;
 
 namespace Microsoft.Azure.Commands.Sql.Replication.Cmdlet
 {
-    [CmdletOutputBreakingChange(
-        deprecatedCmdletOutputTypeName: typeof(AzureReplicationLinkModel),
-        DeprecatedOutputProperties = new String[] { "BackupStorageRedundancy" },
-        NewOutputProperties = new String[] { "CurrentBackupStorageRedundancy", "RequestedBackupStorageRedundancy" })]
+    
     [Cmdlet("Remove", ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "SqlDatabaseSecondary", SupportsShouldProcess = true), OutputType(typeof(AzureReplicationLinkModel))]
     public class RemoveAzureSqlDatabaseSecondary : AzureSqlDatabaseSecondaryCmdletBase
     {

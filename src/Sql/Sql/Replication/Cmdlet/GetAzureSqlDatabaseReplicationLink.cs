@@ -21,10 +21,7 @@ using System.Management.Automation;
 
 namespace Microsoft.Azure.Commands.Sql.Replication.Cmdlet
 {
-    [CmdletOutputBreakingChange(
-        deprecatedCmdletOutputTypeName: typeof(AzureReplicationLinkModel),
-        DeprecatedOutputProperties = new String[] { "BackupStorageRedundancy" },
-        NewOutputProperties = new String[] { "CurrentBackupStorageRedundancy", "RequestedBackupStorageRedundancy" })]
+    
     [Cmdlet("Get", ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "SqlDatabaseReplicationLink", ConfirmImpact = ConfirmImpact.None, SupportsShouldProcess = true)]
     [OutputType(typeof(AzureReplicationLinkModel))]
     public class GetAzureSqlDatabaseReplicationLink : AzureSqlDatabaseSecondaryCmdletBase

@@ -14,7 +14,6 @@ using Microsoft.WindowsAzure.Commands.Common.CustomAttributes;
 
 namespace Microsoft.Azure.Commands.Network
 {
-    [CmdletDeprecation(ReplacementCmdletName = "Get-AzRouteServerPeerLearnedRoute")]
     [Cmdlet(VerbsCommon.Get, ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "VirtualRouterPeerLearnedRoute", DefaultParameterSetName = VirtualRouterPeerParameterSetNames.ByVirtualRouterPeerName), OutputType(typeof(PSPeerRoute))]
     public class GetVirtualRouterPeerLearnedRouteCommand : NetworkBaseCmdlet
     {

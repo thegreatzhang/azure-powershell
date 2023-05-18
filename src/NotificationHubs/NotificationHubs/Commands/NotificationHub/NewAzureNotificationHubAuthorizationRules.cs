@@ -19,7 +19,6 @@ using System.Management.Automation;
 
 namespace Microsoft.Azure.Commands.NotificationHubs.Commands.NotificationHub
 {
-    [GenericBreakingChange("New-AzNotificationHubAuthorizationRules alias will be removed in an upcoming breaking change release", "2.0.0")]
     [Cmdlet("New", ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "NotificationHubAuthorizationRule", SupportsShouldProcess = true), OutputType(typeof(SharedAccessAuthorizationRuleAttributes))]
     [Alias("New-AzNotificationHubAuthorizationRules")]
     public class NewAzureNotificationHubAuthorizationRules : AzureNotificationHubsCmdletBase

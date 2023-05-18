@@ -23,7 +23,6 @@ namespace Microsoft.Azure.Commands.ServiceBus.Commands.NetworkruleSet
     /// <summary>
     /// 'New-AzureRmEventHubIpfilterRule' Cmdlet creates a new IPFilterRule
     /// </summary>
-    [GenericBreakingChange("This cmdlet would be deprecated in a future release. Please use Set-AzServiceBusNetworkRuleSet.")]
     [Cmdlet("Remove", ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "ServiceBusIPRule", DefaultParameterSetName = IPRulePropertiesParameterSet, SupportsShouldProcess = true), OutputType(typeof(PSNetworkRuleSetAttributes))]
     public class RemoveAzureServiceBusIPRule : AzureServiceBusCmdletBase
     {

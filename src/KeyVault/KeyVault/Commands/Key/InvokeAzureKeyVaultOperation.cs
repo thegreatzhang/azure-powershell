@@ -15,7 +15,6 @@ namespace Microsoft.Azure.Commands.KeyVault.Commands.Key
     /// 3. Wraps a symmetric key using a specified key.
     /// 4. Unwraps a symmetric key using the specified key that was initially used for wrapping that key.
     /// </summary>
-    [GenericBreakingChange("The encoded/decoded way between string and bytes will change to UTF8.", "5.0.0", "05/23/2023")]
     [Cmdlet(VerbsLifecycle.Invoke, ResourceManager.Common.AzureRMConstants.AzurePrefix + "KeyVaultKeyOperation", SupportsShouldProcess = true, DefaultParameterSetName = ByVaultNameParameterSet)]
     [OutputType(typeof(PSKeyOperationResult))]
     public class InvokeAzureKeyVaultKeyOperation : KeyVaultKeyCmdletBase

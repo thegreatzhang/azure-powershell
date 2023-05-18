@@ -25,10 +25,7 @@ namespace Microsoft.Azure.Commands.Sql.Replication.Cmdlet
     /// <summary>
     /// Cmdlet to fail over Azure SQL Database Replication Link to the secondary database
     /// </summary>
-    [CmdletOutputBreakingChange(
-        deprecatedCmdletOutputTypeName: typeof(AzureReplicationLinkModel),
-        DeprecatedOutputProperties = new String[] { "BackupStorageRedundancy" },
-        NewOutputProperties = new String[] { "CurrentBackupStorageRedundancy", "RequestedBackupStorageRedundancy" })]
+   
     [Cmdlet("Set", ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "SqlDatabaseSecondary",DefaultParameterSetName = NoOptionsSet,ConfirmImpact = ConfirmImpact.Medium, SupportsShouldProcess = true), OutputType(typeof(AzureReplicationLinkModel))]
     public class SetAzureSqlDatabaseSecondary : AzureSqlDatabaseSecondaryCmdletBase
     {

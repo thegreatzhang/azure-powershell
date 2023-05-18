@@ -38,7 +38,6 @@ namespace Microsoft.Azure.Commands.ContainerRegistry
         public PSContainerRegistry Registry { get; set; }
         
         public const string ChangeDesc = "Parameter is being deprecated without being replaced"; 
-        [CmdletParameterBreakingChange("ResourceId", "4.0.0.0", "05/23/2023", ChangeDescription = ChangeDesc)]
         [Parameter(Mandatory = true, ParameterSetName = ResourceIdParameterSet, ValueFromPipelineByPropertyName = true, HelpMessage = "The container registry resource id")]
         [ValidateNotNullOrEmpty]
         [Alias(ResourceIdAlias)]

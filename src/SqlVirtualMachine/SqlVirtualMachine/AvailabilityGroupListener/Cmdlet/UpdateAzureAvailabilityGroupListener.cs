@@ -26,7 +26,6 @@ namespace Microsoft.Azure.Commands.SqlVirtualMachine.SqlVirtualMachine.Cmdlet
     /// This class implements the Update-AzAvailabilityGroupListener cmdlet. It allows to update the information relative to an Azure Sql Virtual Machine
     /// Group and return to the user an AzureAvailabilityGroupListenerModel object corresponding to the instance updated.
     /// </summary>
-    [CmdletDeprecation()]
     [Cmdlet(VerbsData.Update, ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "AvailabilityGroupListener", DefaultParameterSetName = ParameterSet.Name, SupportsShouldProcess = true)]
     [OutputType(typeof(AzureAvailabilityGroupListenerModel))]
     public class UpdateAzureAvailabilityGroupListener : AzureAvailabilityGroupListenerUpsertCmdletBase

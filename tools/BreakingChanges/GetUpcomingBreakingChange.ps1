@@ -183,7 +183,10 @@ Function Get-AttributeSpecificVersion {
         [System.Object]
         $attribute
     )
-    $Method = $attribute.GetType().GetMethod('GetAttributeSpecificVersion', [System.Reflection.BindingFlags]::NonPublic -bor [System.Reflection.BindingFlags]::Instance)
+    # $Method = $attribute.GetType().GetMethod('GetAttributeSpecificVersion', [System.Reflection.BindingFlags]::NonPublic -bor [System.Reflection.BindingFlags]::Instance)
+    $Method = $attribute.GetType().GetMethod('GetAttributeSpecificMessage', [System.Reflection.BindingFlags]::NonPublic -bor [System.Reflection.BindingFlags]::Instance)
+    
+    Write-host "Method: $Method, attribute: $attribute"
     $Version = $Method.Invoke($attribute, @()).Trim()
     Return $Version
 }
@@ -197,7 +200,8 @@ Function Find-ParameterBreakingChangeVersion {
     )
 
     ForEach ($attribute In $ParameterInfo.Attributes) {
-        If (Test-TypeIsGenericBreakingChangeWithVersionAttribute $attribute.TypeId) {
+        If ($null -ne $attribute -And (Test-TypeIsGenericBreakingChangeAttribute $attribute.TypeId)) {
+            Write-host "attribute: $attribute"
             Return Get-AttributeSpecificVersion($attribute)
         }
     }
@@ -208,10 +212,12 @@ Function Find-ParameterBreakingChangeVersion {
 Function Find-OlderVersion {
     [CmdletBinding()]
     Param (
-        [Parameter()]
+        [parameter(Mandatory=$True)]
+        [AllowEmptyString()]
         [String]
         $Version1,
-        [Parameter()]
+        [parameter(Mandatory=$True)]
+        [AllowEmptyString()]
         [String]
         $Version2
     )
@@ -249,19 +255,21 @@ Function Find-CmdletBreakingChangeVersion {
     $customAttributes = $CmdletInfo.ImplementingType.GetTypeInfo().GetCustomAttributes([System.object], $true)
     
     ForEach ($customAttribute In $customAttributes) {
-        If (Test-TypeIsGenericBreakingChangeWithVersionAttribute $customAttribute.TypeId) {
-            $tmp = Get-AttributeSpecificVersion($customAttribute)
-            $Result = Find-OlderVersion($tmp, $Result)
+        If ($null -ne $customAttribute -And (Test-TypeIsGenericBreakingChangeAttribute $customAttribute.TypeId)) {
+            # $tmp = Get-AttributeSpecificVersion($customAttribute)
+            # $Result = Find-OlderVersion($tmp, $Result)
+            Write-host "attribute: $customAttribute"
+            $Result = Get-AttributeSpecificVersion($customAttribute)
         }
     }
     #EndRegion
 
     #Region get breaking change info of parameters
     ForEach ($ParameterInfo In $CmdletInfo.Parameters.values) {
-        $ParameterBreakingChangeVersion = Find-ParameterBreakingChangeVersion($ParameterInfo)
-        If ("" -ne $ParameterBreakingChangeVersion) {
-            $Result = Find-OlderVersion($ParameterBreakingChangeVersion, $Result)
-        }
+        $Result = Find-ParameterBreakingChangeVersion($ParameterInfo)
+        # If ($null -ne $ParameterBreakingChangeVersion -and "" -ne $ParameterBreakingChangeVersion ) {
+        #     $Result = Find-OlderVersion($ParameterBreakingChangeVersion, $Result)
+        # }
     }
     #EndRegion
 
@@ -279,7 +287,7 @@ Function Get-BreakingChangeVersion
         [String]
         $ModuleName
     )
-    $BreakingChangeVersion = @{}
+    $BreakingChangeVersion = ""
     $ModuleRoot = [System.IO.Path]::Combine($ArtifactsPath, $ModuleName)
 
     # #Region Generated modules
@@ -301,11 +309,11 @@ Function Get-BreakingChangeVersion
         $ModuleInfo = Get-Module $ModuleName
         ForEach ($cmdletInfo In $ModuleInfo.ExportedCmdlets.Values)
         {
-            $cmdletBreakingChangeVersion = Find-CmdletBreakingChangeVersion($cmdletInfo)
-            If ($cmdletBreakingChangeVersion -ne @{})
-            {
-                $BreakingChangeVersion = Find-OlderVersion($cmdletBreakingChangeVersion, $BreakingChangeVersion)
-            }
+            # $cmdletBreakingChangeVersion = Find-CmdletBreakingChangeVersion($cmdletInfo)
+            # if (-not [string]::IsNullOrEmpty($cmdletBreakingChangeVersion)) {
+            #     $BreakingChangeVersion = Find-OlderVersion($cmdletBreakingChangeVersion, $BreakingChangeVersion)
+            # }
+            $BreakingChangeVersion = Find-CmdletBreakingChangeVersion($cmdletInfo)
         }
     }
     #EndRegion
@@ -922,7 +930,7 @@ Function Export-AllBreakingChangeMessageUnderArtifacts
     $AllModuleList = Get-ChildItem -Path $ArtifactsPath -Filter Az.* | ForEach-Object { $_.Name }
     ForEach ($ModuleName In $AllModuleList)
     {
-        $NextBreakingChangeVersion = Get-BreakingChangeVersion -ModuleName $ModuleName -ArtifactsPath $ArtifactsPath
+        $NextBreakingChangeVersion = Get-BreakingChangeVersion -ArtifactsPath $ArtifactsPath -ModuleName $ModuleName 
         $Result += Export-BreakingChangeMessageOfModule -ArtifactsPath $ArtifactsPath -ModuleName $ModuleName -NextBreakingChangeVersion $NextBreakingChangeVersion
     }
     $Result | Out-File -FilePath $MarkdownPath -Force

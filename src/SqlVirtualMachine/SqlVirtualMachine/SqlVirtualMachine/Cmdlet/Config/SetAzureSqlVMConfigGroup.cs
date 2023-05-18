@@ -30,7 +30,6 @@ namespace Microsoft.Azure.Commands.SqlVirtualMachine.SqlVirtualMachine.Cmdlet.Co
     /// Sql Virtual Machine group to the local copy of the powershell object. It returns an instance of AzureSqlVMModel that can be used as configuration
     /// for an Azure Sql Virtual Machine.
     /// </summary>
-    [CmdletDeprecation()]
     [Cmdlet(VerbsCommon.Set, ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "SqlVMConfigGroup", SupportsShouldProcess = true)]
     [OutputType(typeof(AzureSqlVMModel))]
     public class SetAzureSqlVMConfigGroup : AzureSqlVirtualMachineCmdletBase<IEnumerable<AzureSqlVMModel>, AzureSqlVMAdapter>

@@ -32,7 +32,6 @@ namespace Microsoft.Azure.Commands.SqlVirtualMachine.SqlVirtualMachine.Cmdlet
         /// <summary>
         /// Sql virtual machine group resource to be removed
         /// </summary>
-        [CmdletParameterBreakingChange("InputObject", ChangeDescription = "InputObject parameter alias 'SqlVMGroup' will be removed.")]
         [Parameter(Mandatory = true,
             ParameterSetName = ParameterSet.InputObject,
             Position = 0,

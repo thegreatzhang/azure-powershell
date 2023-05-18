@@ -4,7 +4,6 @@ using Microsoft.WindowsAzure.Commands.Common.CustomAttributes;
 
 namespace Microsoft.Azure.Commands.DataLakeStore
 {
-    [GenericBreakingChange("Export-AzDataLakeStoreChildItemProperties alias will be removed in an upcoming breaking change release", "2.0.0")]
     [Cmdlet("Export", ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "DataLakeStoreChildItemProperty", SupportsShouldProcess = true), OutputType(typeof(bool))]
     [Alias("Export-AdlStoreChildItemProperties", "Export-AzDataLakeStoreChildItemProperties")]
     public class ExportAzureRmDataLakeStoreChildItemProperties : DataLakeStoreFileSystemCmdletBase

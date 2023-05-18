@@ -20,7 +20,6 @@ using System.Management.Automation;
 
 namespace Microsoft.Azure.Commands.OperationalInsights
 {
-    [GenericBreakingChange("Get-AzOperationalInsightsIntelligencePacks alias will be removed in an upcoming breaking change release")]
     [Cmdlet("Get", ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "OperationalInsightsIntelligencePack"), OutputType(typeof(PSIntelligencePack))]
     [Alias("Get-AzOperationalInsightsIntelligencePacks")]
     public class GetAzureOperationalInsightsIntelligencePacksCommand : OperationalInsightsBaseCmdlet

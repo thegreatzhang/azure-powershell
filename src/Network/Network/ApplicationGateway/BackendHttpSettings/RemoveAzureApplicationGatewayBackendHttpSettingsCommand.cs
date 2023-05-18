@@ -19,7 +19,6 @@ using System.Management.Automation;
 
 namespace Microsoft.Azure.Commands.Network
 {
-    [GenericBreakingChange("Remove-AzApplicationGatewayBackendHttpSettings alias will be removed in an upcoming breaking change release")]
     [Cmdlet("Remove", ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "ApplicationGatewayBackendHttpSetting"), OutputType(typeof(PSApplicationGateway))]
     [Alias("Remove-AzApplicationGatewayBackendHttpSettings")]
     public class RemoveAzureApplicationGatewayBackendHttpSettingsCommand : NetworkBaseCmdlet

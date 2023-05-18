@@ -229,7 +229,6 @@ namespace Microsoft.Azure.Commands.Network
             HelpMessage = "A hashtable which represents resource tags.")]
         public Hashtable Tag { get; set; }
 
-        [CmdletParameterBreakingChange("UserAssignedIdentityId", ReplaceMentCmdletParameterName = "Identity")]
         [Parameter(
             ParameterSetName = "IdentityByUserAssignedIdentityId",
             Mandatory = false,

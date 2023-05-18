@@ -63,7 +63,6 @@ namespace Microsoft.Azure.Commands.LogicApp.Cmdlets
 
         [Parameter(Mandatory = false, HelpMessage = "The integration account map content type.")]
         [ValidateNotNullOrEmpty]
-        [CmdletParameterBreakingChange("ContentType", ChangeDescription = Constants.DeprecatedContentTypeMessage)]
         public string ContentType { get; set; }
 
         [Parameter(Mandatory = false, HelpMessage = "The integration account map metadata.",

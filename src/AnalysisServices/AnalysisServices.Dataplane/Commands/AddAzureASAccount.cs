@@ -23,7 +23,7 @@ namespace Microsoft.Azure.Commands.AnalysisServices.Dataplane
     /// <summary>
     /// Cmdlet to log into an Analysis Services environment
     /// </summary>
-    [CmdletDeprecation(new Version("22.0.0"), new Version("11.11.11"))]
+    [CmdletDeprecationWithVersion("22.0.0", "11.11.11")]
     [Cmdlet("Add", ResourceManager.Common.AzureRMConstants.AzurePrefix + "AnalysisServicesAccount", DefaultParameterSetName = "UserParameterSetName", SupportsShouldProcess =true)]
     [Alias("Login-AzureAsAccount", "Login-AzAsAccount")]
     [OutputType(typeof(AsAzureProfile))]

@@ -26,7 +26,7 @@ namespace Microsoft.Azure.Commands.Management.CognitiveServices
     /// <summary>
     /// Get Available Skus for Cognitive Services Account
     /// </summary>
-    [GenericBreakingChange("Get-AzCognitiveServicesAccountSkus alias will be removed in an upcoming breaking change release", new Version("22.0.0"), new Version("11.11.11") )]
+    [GenericBreakingChangeWithVersion("Get-AzCognitiveServicesAccountSkus alias will be removed in an upcoming breaking change release", "22.0.0", "11.11.11")]
     [Cmdlet("Get", ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "CognitiveServicesAccountSku", DefaultParameterSetName = GetSkusWithFilterParamSetName),
         OutputType(typeof(ResourceSku))]
     [Alias("Get-AzCognitiveServicesAccountSkus")]

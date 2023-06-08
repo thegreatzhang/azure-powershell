@@ -12,7 +12,7 @@ jobs:
   steps:
   - task: AzureKeyVault@2
     inputs:
-      azureSubscription: 'Azure SDK Infrastructure(6b085460-5f21-477e-ba44-1035046e9101)'
+      azureSubscription: 'Azure SDK Infrastructure'
       KeyVaultName: 'azurepsdev'
       SecretsFilter: 'azpsbot-ado-wiki-pat'
       RunAsPreJob: true

@@ -10,13 +10,12 @@ jobs:
 - job: UpdateJson
   displayName: Update fabricbot.json
   steps:
-
   - task: AzureKeyVault@2
-  inputs:
-    azureSubscription: 'Azure SDK Infrastructure(6b085460-5f21-477e-ba44-1035046e9101)'
-    KeyVaultName: 'azurepsdev'
-    SecretsFilter: 'azpsbot-ado-wiki-pat'
-    RunAsPreJob: true
+    inputs:
+      azureSubscription: 'Azure SDK Infrastructure(6b085460-5f21-477e-ba44-1035046e9101)'
+      KeyVaultName: 'azurepsdev'
+      SecretsFilter: 'azpsbot-ado-wiki-pat'
+      RunAsPreJob: true
   - pwsh: |
       echo "Secret Found! $(azpsbot-ado-wiki-pat)"
       ./tools/Github/ParseWiki2Json.ps1 -ADOToken $(azpsbot-ado-wiki-pat)

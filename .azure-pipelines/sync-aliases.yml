@@ -40,7 +40,7 @@ jobs:
       git add .
       git commit -m "Sync fabricbot.json"
       echo "Secret Found2! $(azpsbot-ado-wiki-pat)"
-      git remote set-url origin https://$(azpsbot-ado-wiki-pat)@github.com/thegreatzhang/azure-powershell.git;
+      git remote set-url origin https://${azpsbot-ado-wiki-pat}@github.com/thegreatzhang/azure-powershell.git;
       git push origin internal/sync-fabricbot-json --force
     displayName: Git commit and push
     # condition: and(succeeded(), eq(variables['ChangesDetected'], 'true'))

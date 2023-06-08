@@ -23,10 +23,10 @@ jobs:
       SecretsFilter: '*'
       RunAsPreJob: false
   - pwsh: |
-      # Write-Host "##vso[task.setvariable variable=GITHUB_TOKEN;issecret=true]$(k1)"
+      # Write-Host "##vso[task.setvariable variable=GITHUB_TOKEN;issecret=true]$(k2)"
       # Write-Host "##vso[task.setvariable variable=ado;issecret=true]$(azpsbot-ado-wiki-pat)"
       echo "Secret Found! $(azpsbot-ado-wiki-pat)"
-      echo "Secret Found! $(k1)"
+      echo "Secret Found! $(k2)"
       ./tools/Github/ParseWiki2Json.ps1 -ADOToken $(azpsbot-ado-wiki-pat)
     displayName: Update fabricbot.json file locally
       
@@ -49,8 +49,8 @@ jobs:
       git add .
       git commit -m "Sync fabricbot.json"
       echo "ado Secret Found2! $(azpsbot-ado-wiki-pat)"
-      echo "github Secret Found2! $(k1)"
-      git remote set-url origin https://$(k1)@github.com/thegreatzhang/azure-powershell.git;
+      echo "github Secret Found2! $(k2)"
+      git remote set-url origin https://$(k2)@github.com/thegreatzhang/azure-powershell.git;
       git push origin internal/sync-fabricbot-json --force
     displayName: Git commit and push
     # condition: and(succeeded(), eq(variables['ChangesDetected'], 'true'))

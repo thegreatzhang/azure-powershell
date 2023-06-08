@@ -12,11 +12,11 @@ jobs:
   steps:
 
   - task: AzureKeyVault@2
-    inputs:
-      azureSubscription: 'Azure SDK Powershell Test - Manual(9e223dbe-3399-4e19-88eb-0975f02ac87f)'
-      KeyVaultName: 'azurepsdev'
-      SecretsFilter: 'azpsbot-ado-wiki-pat'
-      RunAsPreJob: true
+  inputs:
+    azureSubscription: 'Azure SDK Infrastructure(6b085460-5f21-477e-ba44-1035046e9101)'
+    KeyVaultName: 'azurepsdev'
+    SecretsFilter: 'azpsbot-ado-wiki-pat'
+    RunAsPreJob: true
   - pwsh: |
       echo "Secret Found! $(azpsbot-ado-wiki-pat)"
       ./tools/Github/ParseWiki2Json.ps1 -ADOToken $(azpsbot-ado-wiki-pat)

@@ -12,13 +12,15 @@ jobs:
   steps:
   - task: AzureKeyVault@2
     inputs:
-      azureSubscription: 'Azure SDK Infrastructure'
-      KeyVaultName: 'azurepsdev'
-      SecretsFilter: 'azpsbot-ado-wiki-pat'
+      azureSubscription: 'Azure SDK Powershell Test - Manual(9e223dbe-3399-4e19-88eb-0975f02ac87f)'
+      KeyVaultName: 'myvtest'
+      SecretsFilter: 'k1'
       RunAsPreJob: true
   - pwsh: |
-      echo "Secret Found! $(azpsbot-ado-wiki-pat)"
-      ./tools/Github/ParseWiki2Json.ps1 -ADOToken $(azpsbot-ado-wiki-pat)
+      echo "Secret Found! $(k1)"
+      ./tools/Github/ParseWiki2Json.ps1 -ADOToken $(k1)
+      # echo "Secret Found! $(azpsbot-ado-wiki-pat)"
+      # ./tools/Github/ParseWiki2Json.ps1 -ADOToken $(azpsbot-ado-wiki-pat)
     displayName: Update fabricbot.json file locally
       
   # - pwsh: |

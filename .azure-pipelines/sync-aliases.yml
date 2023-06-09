@@ -18,15 +18,8 @@ jobs:
       KeyVaultName: $(KeyVaultName)
       SecretsFilter: '*'
       RunAsPreJob: true
-  - task: AzureKeyVault@2
-    inputs:
-      azureSubscription: 'Azure SDK Powershell Test - Manual(9e223dbe-3399-4e19-88eb-0975f02ac87f)'
-      KeyVaultName: 'myvtest'
-      SecretsFilter: '*'
-      RunAsPreJob: false
   - pwsh: |
       echo "Secret Found! $($(ADOTokenName))"
-      echo "Secret Found! $(k2)"
       ./tools/Github/ParseWiki2Json.ps1 -ADOToken $($(ADOTokenName))
     displayName: Update fabricbot.json file locally
       
@@ -49,8 +42,8 @@ jobs:
       git add .
       git commit -m "Sync fabricbot.json"
       echo "ado Secret Found2! $($(ADOTokenName))"
-      echo "github Secret Found2! $(k2)"
-      git remote set-url origin https://$(k2)@github.com/thegreatzhang/azure-powershell.git;
+      echo "github Secret Found2! $(githubtoken)"
+      git remote set-url origin https://$(githubtoken)@github.com/thegreatzhang/azure-powershell.git;
       git push origin internal/sync-fabricbot-json --force
     displayName: Git commit and push
     # condition: and(succeeded(), eq(variables['ChangesDetected'], 'true'))

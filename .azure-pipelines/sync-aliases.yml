@@ -20,7 +20,6 @@ jobs:
       RunAsPreJob: true
   - pwsh: |
       echo "ado Found! ${env:ADOTOKENNAME}"
-      echo "ado Found?! $(env:ADOTOKENNAME)"
       ./tools/Github/ParseWiki2Json.ps1 -ADOToken $(${env:ADOTOKENNAME})
     displayName: Update fabricbot.json file locally
       

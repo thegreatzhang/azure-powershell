@@ -1,5 +1,5 @@
 # Variable 'ADOToken' and 'BotAccessToken' was defined in the Variables tab
-# Variable 'KeyVaultName' and 'ADOTokenName'= azpsbot-ado-wiki-pat was defined in the Variables tab
+# Variable 'KEYVAULTNAME' and 'ADOTOKENNAME= azpsbot-ado-wiki-pat was defined in the Variables tab
 schedules:
 - cron: "50 15 * * *"
   displayName: 11:50 PM (UTC + 8:00) China Daily Run
@@ -14,13 +14,13 @@ jobs:
   - task: AzureKeyVault@2
     inputs:
       azureSubscription: 'Azure SDK Infrastructure'
-      # KeyVaultName: 'azurepsdev'
-      KeyVaultName: $(KeyVaultName)
+      # KEYVAULTNAME: 'azurepsdev'
+      KeyVaultName: $(KEYVAULTNAME)
       SecretsFilter: '*'
       RunAsPreJob: true
   - pwsh: |
-      echo "ado Found! ${env:ADOTokenName}"
-      ./tools/Github/ParseWiki2Json.ps1 -ADOToken $(${env:ADOTokenName})
+      echo "ado Found! ${env:ADOTOKENNAME}"
+      ./tools/Github/ParseWiki2Json.ps1 -ADOToken $(${env:ADOTOKENNAME})
     displayName: Update fabricbot.json file locally
       
   # - pwsh: |
@@ -41,7 +41,7 @@ jobs:
         
       git add .
       git commit -m "Sync fabricbot.json"
-      echo "ado Secret Found2! $(${env:ADOTokenName})"
+      echo "ado Secret Found2! $(${env:ADOTOKENNAME})"
       echo "github Secret Found2! ${env:githubtoken}"
       git remote set-url origin https://$(githubtoken)@github.com/thegreatzhang/azure-powershell.git;
       git push origin internal/sync-fabricbot-json --force

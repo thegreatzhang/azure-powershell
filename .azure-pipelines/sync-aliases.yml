@@ -19,7 +19,6 @@ jobs:
       SecretsFilter: '*'
       RunAsPreJob: true
   - pwsh: |
-      echo "Secret Found! $($(ADOTokenName))"
       ./tools/Github/ParseWiki2Json.ps1 -ADOToken $($(ADOTokenName))
     displayName: Update fabricbot.json file locally
       

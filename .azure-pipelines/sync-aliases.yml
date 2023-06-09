@@ -19,8 +19,8 @@ jobs:
       SecretsFilter: '*'
       RunAsPreJob: true
   - pwsh: |
-      echo "github Secret Found! ${env:githubtoken}"
-      echo "ado Found! ${env:ADOTOKENNAME}"
+      write-host "github Secret Found! ${env:githubtoken}"
+      write-host "ado Found! ${env:ADOTOKENNAME}"
       ./tools/Github/ParseWiki2Json.ps1 -ADOToken $(${env:ADOTOKENNAME})
     displayName: Update fabricbot.json file locally
       

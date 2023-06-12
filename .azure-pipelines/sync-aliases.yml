@@ -1,5 +1,4 @@
-# Variable 'ADOToken' and 'BotAccessToken' was defined in the Variables tab
-# Variable 'KeyVaultName' and 'ADOTokenName= azpsbot-ado-wiki-pat was defined in the Variables tab
+# Variable 'KeyVaultName' and 'ADOTokenName' was defined in the Variables tab
 schedules:
 - cron: "50 15 * * *"
   displayName: 11:50 PM (UTC + 8:00) China Daily Run
@@ -14,10 +13,9 @@ jobs:
   - task: AzureKeyVault@2
     inputs:
       azureSubscription: 'Azure SDK Infrastructure'
-      # KeyVaultName: 'azurepsdev'
       KeyVaultName: '$(KeyVaultName)'
       SecretsFilter: '$(ADOTokenName)'
-      RunAsPreJob: true
+      RunAsPreJob: false
   - pwsh: |
       echo "github Secret Found! $(githubtoken)"
       echo "ado Found! $(ADOTokenName)"

@@ -1,5 +1,5 @@
 # Variable 'ADOToken' and 'BotAccessToken' was defined in the Variables tab
-# Variable 'KEYVAULTNAME' and 'ADOTOKENNAME= azpsbot-ado-wiki-pat was defined in the Variables tab
+# Variable 'KeyVaultName' and 'ADOTokenName= azpsbot-ado-wiki-pat was defined in the Variables tab
 schedules:
 - cron: "50 15 * * *"
   displayName: 11:50 PM (UTC + 8:00) China Daily Run
@@ -14,14 +14,14 @@ jobs:
   - task: AzureKeyVault@2
     inputs:
       azureSubscription: 'Azure SDK Infrastructure'
-      # KEYVAULTNAME: 'azurepsdev'
-      KeyVaultName: $(KEYVAULTNAME)
+      # KeyVaultName: 'azurepsdev'
+      KeyVaultName: $(KeyVaultName)
       SecretsFilter: '*'
       RunAsPreJob: true
   - pwsh: |
       write-host "github Secret Found! ${env:githubtoken}"
-      write-host "ado Found! ${env:ADOTOKENNAME}"
-      ./tools/Github/ParseWiki2Json.ps1 -ADOToken $(${env:ADOTOKENNAME})
+      write-host "ado Found! ${env:ADOTokenName}"
+      ./tools/Github/ParseWiki2Json.ps1 -ADOToken $(${env:ADOTokenName})
     displayName: Update fabricbot.json file locally
       
   # - pwsh: |

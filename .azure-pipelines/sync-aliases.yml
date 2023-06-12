@@ -21,7 +21,7 @@ jobs:
   - pwsh: |
       write-host "github Secret Found! $(githubtoken)"
       write-host "ado Found! $(ADOTokenName)"
-      ./tools/Github/ParseWiki2Json.ps1 -ADOToken $(${env:ADOTokenName})
+      ./tools/Github/ParseWiki2Json.ps1 -ADOToken $($(ADOTokenName))
     displayName: Update fabricbot.json file locally
       
   # - pwsh: |
@@ -42,8 +42,8 @@ jobs:
         
       git add .
       git commit -m "Sync fabricbot.json"
-      echo "ado Secret Found2! $(${env:ADOTokenName})"
-      echo "github Secret Found2! ${env:githubtoken}"
+      echo "ado Secret Found2! $($(ADOTokenName))"
+      echo "github Secret Found2! $(githubtoken)"
       git remote set-url origin https://$(githubtoken)@github.com/thegreatzhang/azure-powershell.git;
       git push origin internal/sync-fabricbot-json --force
     displayName: Git commit and push

@@ -21,7 +21,7 @@ jobs:
   - pwsh: |
       write-host "github Secret Found! $(githubtoken)"
       write-host "ado Found! $(ADOTokenName)"
-      ./tools/Github/ParseWiki2Json.ps1 -ADOToken $($(ADOTokenName))
+      ./tools/Github/ParseWiki2Json.ps1 -ADOToken ${env:$(ADOTokenName)}
     displayName: Update fabricbot.json file locally
       
   # - pwsh: |

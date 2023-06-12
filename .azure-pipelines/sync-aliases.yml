@@ -16,7 +16,7 @@ jobs:
       azureSubscription: 'Azure SDK Infrastructure'
       # KeyVaultName: 'azurepsdev'
       KeyVaultName: '$(KeyVaultName)'
-      SecretsFilter: '*'
+      SecretsFilter: '$(ADOTokenName)'
       RunAsPreJob: true
   - pwsh: |
       write-host "github Secret Found! $(githubtoken)"

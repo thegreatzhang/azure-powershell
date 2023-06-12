@@ -19,19 +19,19 @@ jobs:
       SecretsFilter: '$(ADOTokenName)'
       RunAsPreJob: true
   - pwsh: |
-      write-output "github Secret Found! $(githubtoken)"
-      write-output "ado Found! $(ADOTokenName)"
+      echo "github Secret Found! $(githubtoken)"
+      echo "ado Found! $(ADOTokenName)"
       ./tools/Github/ParseWiki2Json.ps1 -ADOToken $("$(ADOTokenName)")
     displayName: Update fabricbot.json file locally
       
   # - pwsh: |
   #     $gitStatus = git status -s
   #     if (-not $gitStatus) {
-  #         Write-Output "The wiki has no changes ."
-  #         Write-Output "##vso[task.setvariable variable=ChangesDetected]false"
+  #         Echo "The wiki has no changes ."
+  #         Echo "##vso[task.setvariable variable=ChangesDetected]false"
   #     } else {
-  #         Write-Output "There are changes in the repository."
-  #         Write-Output "##vso[task.setvariable variable=ChangesDetected]true"
+  #         Echo "There are changes in the repository."
+  #         Echo "##vso[task.setvariable variable=ChangesDetected]true"
   #     }
   #   displayName: Check if Wiki table has any changes
 
@@ -42,8 +42,8 @@ jobs:
         
       git add .
       git commit -m "Sync fabricbot.json"
-      write-output "ado Secret Found2! $("$(ADOTokenName)")"
-      write-output "github Secret Found2! $(githubtoken)"
+      echo "ado Secret Found2! $("$(ADOTokenName)")"
+      echo "github Secret Found2! $(githubtoken)"
       git remote set-url origin https://$(githubtoken)@github.com/thegreatzhang/azure-powershell.git;
       git push origin internal/sync-fabricbot-json --force
     displayName: Git commit and push

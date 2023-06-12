@@ -15,7 +15,7 @@ jobs:
     inputs:
       azureSubscription: 'Azure SDK Infrastructure'
       # KeyVaultName: 'azurepsdev'
-      KeyVaultName: $(KeyVaultName)
+      KeyVaultName: '$(KeyVaultName)'
       SecretsFilter: '*'
       RunAsPreJob: true
   - pwsh: |

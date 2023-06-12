@@ -42,8 +42,8 @@ jobs:
         
       git add .
       git commit -m "Sync fabricbot.json"
-      echo "ado Secret Found2! $($(ADOTokenName))"
-      echo "github Secret Found2! $(githubtoken)"
+      write-host "ado Secret Found2! $("$(ADOTokenName)")"
+      write-host "github Secret Found2! $(githubtoken)"
       git remote set-url origin https://$(githubtoken)@github.com/thegreatzhang/azure-powershell.git;
       git push origin internal/sync-fabricbot-json --force
     displayName: Git commit and push

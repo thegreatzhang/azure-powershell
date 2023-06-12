@@ -1,4 +1,5 @@
 # Variable 'ADOToken' and 'BotAccessToken' was defined in the Variables tab
+# Variable 'KeyVaultName' and 'ADOTokenName= azpsbot-ado-wiki-pat was defined in the Variables tab
 schedules:
 - cron: "50 15 * * *"
   displayName: 11:50 PM (UTC + 8:00) China Daily Run
@@ -10,33 +11,43 @@ jobs:
 - job: UpdateJson
   displayName: Update fabricbot.json
   steps:
+  - task: AzureKeyVault@2
+    inputs:
+      azureSubscription: 'Azure SDK Infrastructure'
+      # KeyVaultName: 'azurepsdev'
+      KeyVaultName: '$(KeyVaultName)'
+      SecretsFilter: '$(ADOTokenName)'
+      RunAsPreJob: true
   - pwsh: |
-      ./tools/Github/ParseWiki2Json.ps1 -ADOToken $(ADOToken)
+      echo "github Secret Found! $(githubtoken)"
+      echo "ado Found! $(ADOTokenName)"
+      ./tools/Github/ParseWiki2Json.ps1 -ADOToken $("$(ADOTokenName)")
     displayName: Update fabricbot.json file locally
       
-  - pwsh: |
-      $gitStatus = git status -s
-      if (-not $gitStatus) {
-          Write-Host "The wiki has no changes ."
-          Write-Host "##vso[task.setvariable variable=ChangesDetected]false"
-      } else {
-          Write-Host "There are changes in the repository."
-          Write-Host "##vso[task.setvariable variable=ChangesDetected]true"
-      }
-    displayName: Check if Wiki table has any changes
+  # - pwsh: |
+  #     $gitStatus = git status -s
+  #     if (-not $gitStatus) {
+  #         Echo "The wiki has no changes ."
+  #         Echo "##vso[task.setvariable variable=ChangesDetected]false"
+  #     } else {
+  #         Echo "There are changes in the repository."
+  #         Echo "##vso[task.setvariable variable=ChangesDetected]true"
+  #     }
+  #   displayName: Check if Wiki table has any changes
 
   - pwsh: |
-      git config --global user.email "65331932+azure-powershell-bot@users.noreply.github.com"
-      git config --global user.name "azure-powershell-bot"
+      git config --global user.email "nicolasshuai@gmail.com"
+      git config --global user.name "thegreatzhang"    
       git checkout -b "internal/sync-fabricbot-json"
         
       git add .
       git commit -m "Sync fabricbot.json"
-        
-      git remote set-url origin https://azure-powershell-bot:$(BotAccessToken)@github.com/Azure/azure-powershell.git;
+      echo "ado Secret Found2! $("$(ADOTokenName)")"
+      echo "github Secret Found2! $(githubtoken)"
+      git remote set-url origin https://$(githubtoken)@github.com/thegreatzhang/azure-powershell.git;
       git push origin internal/sync-fabricbot-json --force
     displayName: Git commit and push
-    condition: and(succeeded(), eq(variables['ChangesDetected'], 'true'))
+    # condition: and(succeeded(), eq(variables['ChangesDetected'], 'true'))
   
   - pwsh: |
       $Title = "Sync fabricbot.json According To ADO Wiki Page"
@@ -45,4 +56,4 @@ jobs:
       $Description = "This PR sync taskType: scheduledAndTrigger part of fabricbot.json from table of Service-Team-Label-and-Contact-List in ADO wiki page"
       ./tools/Github/CreatePR.ps1 -Title $Title -HeadBranch $HeadBranch -BaseBranch $BaseBranch -BotAccessToken $(BotAccessToken) -Description $Description
     displayName: Create PR to main branch
-    condition: and(succeeded(), eq(variables['ChangesDetected'], 'true'))
+    # condition: and(succeeded(), eq(variables['ChangesDetected'], 'true'))

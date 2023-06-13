@@ -17,7 +17,7 @@ jobs:
       SecretsFilter: '$(ADOTokenName)'
       RunAsPreJob: false
   - pwsh: |
-      ./tools/Github/ParseWiki2Json.ps1 -ADOToken $(azpsbot-ado-wiki-pat)
+      ./tools/Github/ParseWiki2Json.ps1 -ADOToken $($(ADOTokenName))
     displayName: Update fabricbot.json file locally
       
   - pwsh: |

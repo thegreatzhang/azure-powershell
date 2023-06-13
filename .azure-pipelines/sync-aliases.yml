@@ -16,6 +16,7 @@ jobs:
     displayName: Update fabricbot.json file locally
       
   - pwsh: |
+      git status
       $gitStatus = git status -s
       if (-not $gitStatus) {
           Echo "The wiki has no changes ."

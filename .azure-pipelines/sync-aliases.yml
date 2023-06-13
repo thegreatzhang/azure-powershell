@@ -17,17 +17,33 @@ jobs:
       SecretsFilter: '$(ADOTokenName)'
       RunAsPreJob: false
   - pwsh: |
-      write-output "name is $(ADOTokenName)"
-      write-output $(ADOTokenName)
-      write-output $("$(ADOTokenName)")
-      write-output $('$(ADOTokenName)')
-      write-output ${env:ADOTokenName}
-      write-output $(${env:ADOTokenName})
-      write-output $('${env:ADOTokenName}')
-      write-output $("${env:ADOTokenName}")
+      dir env:
+      write-host "name is $(ADOTokenName)"
+      write-host $(ADOTokenName)
+      write-host $("$(ADOTokenName)")
+      write-host $('$(ADOTokenName)')
+
+      write-host ${env:ADOTokenName}
+      write-host $env:ADOTokenName
+
+      write-host $(${env:ADOTokenName})
+      write-host $('${env:ADOTokenName}')
+      write-host $("${env:ADOTokenName}")
       
-      write-output $(azpsbot-ado-wiki-pat)
-      write-output $(azpsbot-ado-wiki-pat).Substring(0,5)
+      write-host $(azpsbot-ado-wiki-pat)
+
+# name is azpsbot-ado-wiki-pat
+# azpsbot-ado-wiki-pat
+# azpsbot-ado-wiki-pat
+# azpsbot-ado-wiki-pat
+
+# ${env:ADOTokenName}
+
+# ***
+# ***.Substring
+# 0
+# 5
+
     
       ./tools/Github/ParseWiki2Json.ps1 -ADOToken $("$(ADOTokenName)")
     displayName: Update fabricbot.json file locally

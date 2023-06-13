@@ -20,7 +20,10 @@ jobs:
       write-output "name is $(ADOTokenName)"
       write-output $(ADOTokenName)
       write-output $("$(ADOTokenName)")
-      write-output $("$(ADOTokenName)").Substring(0,5)
+      
+      write-output $(azpsbot-ado-wiki-pat)
+      write-output $(azpsbot-ado-wiki-pat).Substring(0,5)
+      write-output ${env:"$(ADOTokenName)"}.Substring(0,5)
       ./tools/Github/ParseWiki2Json.ps1 -ADOToken $("$(ADOTokenName)")
     displayName: Update fabricbot.json file locally
       

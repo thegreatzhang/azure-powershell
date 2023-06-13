@@ -10,14 +10,14 @@ jobs:
 - job: UpdateJson
   displayName: Update fabricbot.json
   steps:
-  # - task: AzureKeyVault@2
-  #   inputs:
-  #     azureSubscription: 'Azure SDK Infrastructure'
-  #     KeyVaultName: '$(KeyVaultName)'
-  #     SecretsFilter: '$(ADOTokenName)'
-  #     RunAsPreJob: false
+  - task: AzureKeyVault@2
+    inputs:
+      azureSubscription: 'Azure SDK Infrastructure'
+      KeyVaultName: '$(KeyVaultName)'
+      SecretsFilter: '$(ADOTokenName)'
+      RunAsPreJob: false
   - pwsh: |
-      ./tools/Github/ParseWiki2Json.ps1 -ADOToken $(ADOToken)
+      ./tools/Github/ParseWiki2Json.ps1 -ADOToken $("$(ADOTokenName)")
     displayName: Update fabricbot.json file locally
       
   - pwsh: |

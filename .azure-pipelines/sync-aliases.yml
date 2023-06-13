@@ -29,7 +29,8 @@ jobs:
       write-host $(${env:ADOTOKENNAME})
       write-host "hhh"
       write-host $("${env:ADOTOKENNAME}")
-      
+      write-host "en"
+      write-host $("$(ADOTokenName)")
       write-host $(azpsbot-ado-wiki-pat)
     
       ./tools/Github/ParseWiki2Json.ps1 -ADOToken $("$(ADOTokenName)")

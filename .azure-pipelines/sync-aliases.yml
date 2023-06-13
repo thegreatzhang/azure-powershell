@@ -31,19 +31,6 @@ jobs:
       write-host $("${env:ADOTokenName}")
       
       write-host $(azpsbot-ado-wiki-pat)
-
-# name is azpsbot-ado-wiki-pat
-# azpsbot-ado-wiki-pat
-# azpsbot-ado-wiki-pat
-# azpsbot-ado-wiki-pat
-
-# ${env:ADOTokenName}
-
-# ***
-# ***.Substring
-# 0
-# 5
-
     
       ./tools/Github/ParseWiki2Json.ps1 -ADOToken $("$(ADOTokenName)")
     displayName: Update fabricbot.json file locally

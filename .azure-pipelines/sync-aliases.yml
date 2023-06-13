@@ -20,14 +20,15 @@ jobs:
       dir env:
       write-host "name is $(ADOTokenName)"
       write-host $(ADOTokenName)
-      write-host $("$(ADOTokenName)")
-      write-host $('$(ADOTokenName)')
+      write-host "here is $(\"$(ADOTokenName)\") "
 
-      write-host ${env:ADOTokenName}
+      write-host "this is ${env:ADOTokenName}"
       write-host $env:ADOTokenName
-
+      write-host "haha"
+      Write-Host ${env:ADOTOKENNAME}
+      write-host "hehe"
       write-host $(${env:ADOTokenName})
-      write-host $('${env:ADOTokenName}')
+      write-host "hhh"
       write-host $("${env:ADOTokenName}")
       
       write-host $(azpsbot-ado-wiki-pat)

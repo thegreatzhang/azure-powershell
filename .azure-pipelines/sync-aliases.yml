@@ -10,31 +10,43 @@ jobs:
 - job: UpdateJson
   displayName: Update fabricbot.json
   steps:
-  - task: AzureKeyVault@2
-    inputs:
-      azureSubscription: 'Azure SDK Infrastructure'
-      KeyVaultName: '$(KeyVaultName)'
-      SecretsFilter: '$(ADOTokenName)'
-      RunAsPreJob: false
-  - pwsh: |
-      dir env:
-      write-host "name is $(ADOTokenName)"
-      write-host $(ADOTokenName)
+  # - task: AzureKeyVault@2
+  #   inputs:
+  #     azureSubscription: 'Azure SDK Infrastructure'
+  #     KeyVaultName: '$(KeyVaultName)'
+  #     SecretsFilter: '$(ADOTokenName)'
+  #     RunAsPreJob: false
+  # - pwsh: |
+  #     # dir env:
+  #     # write-host "name is $(ADOTokenName)"
+  #     # write-host $(ADOTokenName)
 
-      write-host "this is ${env:ADOTOKENNAME}"
-      write-host $env:ADOTokenName
-      write-host "haha"
-      Write-Host ${env:ADOTOKENNAME}
-      write-host "hehe"
-      write-host $(${env:ADOTOKENNAME})
-      write-host "hhh"
-      write-host $("${env:ADOTOKENNAME}")
-      write-host "en"
-      write-host $("$(ADOTokenName)")
-      write-host $(azpsbot-ado-wiki-pat)
+  #     # write-host "this is ${env:ADOTOKENNAME}"
+  #     # write-host $env:ADOTokenName
+  #     # write-host "haha"
+  #     # Write-Host ${env:ADOTOKENNAME}
+  #     # write-host "hehe"
+  #     # write-host $(${env:ADOTOKENNAME})
+  #     # write-host "hhh"
+  #     # write-host $("${env:ADOTOKENNAME}")
+  #     # write-host "en"
+  #     # write-host $("$(ADOTokenName)")
+  #     # write-host $(azpsbot-ado-wiki-pat)
     
-      ./tools/Github/ParseWiki2Json.ps1 -ADOToken $("$(ADOTokenName)")
-    displayName: Update fabricbot.json file locally
+  #     ./tools/Github/ParseWiki2Json.ps1 -ADOToken $("$(ADOTokenName)")
+  #   displayName: Update fabricbot.json file locally
+  - task: AzurePowerShell@5
+  inputs:
+
+    azureSubscription: 'Azure SDK Infrastructure'
+    ScriptType: 'InlineScript'
+    Inline: |
+      dir env: 
+      $tokenValue = Get-AzKeyVaultSecret -VaultName ${env:KEYVAULTNAME} -Name ${env:ADOTOKENNAME} -AsPlainText
+      Write-Host $tokenValue
+      ./tools/Github/ParseWiki2Json.ps1 -ADOToken $tokenValue
+    azurePowerShellVersion: 'LatestVersion'
+    displayName: Update fabricbot.json file locally try
       
   - pwsh: |
       git status

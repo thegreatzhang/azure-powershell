@@ -10,31 +10,6 @@ jobs:
 - job: UpdateJson
   displayName: Update fabricbot.json
   steps:
-  # - task: AzureKeyVault@2
-  #   inputs:
-  #     azureSubscription: 'Azure SDK Infrastructure'
-  #     KeyVaultName: '$(KeyVaultName)'
-  #     SecretsFilter: '$(ADOTokenName)'
-  #     RunAsPreJob: false
-  # - pwsh: |
-  #     # dir env:
-  #     # write-host "name is $(ADOTokenName)"
-  #     # write-host $(ADOTokenName)
-
-  #     # write-host "this is ${env:ADOTOKENNAME}"
-  #     # write-host $env:ADOTokenName
-  #     # write-host "haha"
-  #     # Write-Host ${env:ADOTOKENNAME}
-  #     # write-host "hehe"
-  #     # write-host $(${env:ADOTOKENNAME})
-  #     # write-host "hhh"
-  #     # write-host $("${env:ADOTOKENNAME}")
-  #     # write-host "en"
-  #     # write-host $("$(ADOTokenName)")
-  #     # write-host $(azpsbot-ado-wiki-pat)
-    
-  #     ./tools/Github/ParseWiki2Json.ps1 -ADOToken $("$(ADOTokenName)")
-  #   displayName: Update fabricbot.json file locally
   - task: AzurePowerShell@5
     inputs:
       azureSubscription: 'Azure SDK Infrastructure'
@@ -43,11 +18,12 @@ jobs:
         $tokenValue = Get-AzKeyVaultSecret -VaultName ${env:KEYVAULTNAME} -Name ${env:ADOTOKENNAME}
         Write-Host "##vso[task.setvariable variable=token;issecret=true]$tokenValue"       
       azurePowerShellVersion: 'LatestVersion'
-    displayName: 1Update fabricbot.json file locally try
+    displayName: Get secrets from Key Vault
+
   - pwsh: |
-      Write-Host $(token)
       ./tools/Github/ParseWiki2Json.ps1 -ADOToken $(token)
-    displayName: Update fabricbot.json file locally try2
+    displayName: Update fabricbot.json file locally
+    
   - pwsh: |
       git status
       $gitStatus = git status -s

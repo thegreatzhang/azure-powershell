@@ -42,9 +42,7 @@ jobs:
       Inline: |
         dir env: 
         $tokenValue = Get-AzKeyVaultSecret -VaultName ${env:KEYVAULTNAME} -Name ${env:ADOTOKENNAME} -AsPlainText
-        Write-Host "##vso[task.setvariable variable=token;issecret=true]tokenValue"
-        Write-Host $(token)
-        
+        Write-Host "##vso[task.setvariable variable=token;issecret=true]tokenValue"       
       azurePowerShellVersion: 'LatestVersion'
     displayName: Update fabricbot.json file locally try
   - pwsh: |

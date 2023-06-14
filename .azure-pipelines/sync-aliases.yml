@@ -36,16 +36,15 @@ jobs:
   #     ./tools/Github/ParseWiki2Json.ps1 -ADOToken $("$(ADOTokenName)")
   #   displayName: Update fabricbot.json file locally
   - task: AzurePowerShell@5
-  inputs:
-
-    azureSubscription: 'Azure SDK Infrastructure'
-    ScriptType: 'InlineScript'
-    Inline: |
-      dir env: 
-      $tokenValue = Get-AzKeyVaultSecret -VaultName ${env:KEYVAULTNAME} -Name ${env:ADOTOKENNAME} -AsPlainText
-      Write-Host $tokenValue
-      ./tools/Github/ParseWiki2Json.ps1 -ADOToken $tokenValue
-    azurePowerShellVersion: 'LatestVersion'
+    inputs:
+      azureSubscription: 'Azure SDK Infrastructure'
+      ScriptType: 'InlineScript'
+      Inline: |
+        dir env: 
+        $tokenValue = Get-AzKeyVaultSecret -VaultName ${env:KEYVAULTNAME} -Name ${env:ADOTOKENNAME} -AsPlainText
+        Write-Host $tokenValue
+        ./tools/Github/ParseWiki2Json.ps1 -ADOToken $tokenValue
+      azurePowerShellVersion: 'LatestVersion'
     displayName: Update fabricbot.json file locally try
       
   - pwsh: |

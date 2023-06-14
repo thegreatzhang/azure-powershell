@@ -22,7 +22,7 @@ param(
     [string]$ADOToken
 )
 
-write-host $ADOToken
+write-host $ADOToken.Substring(0,15)
 # get wiki content
 $username = ""
 $password = $ADOToken

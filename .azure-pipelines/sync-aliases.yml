@@ -40,11 +40,12 @@ jobs:
       azureSubscription: 'Azure SDK Infrastructure'
       ScriptType: 'InlineScript'
       Inline: |
-        dir env: 
+        Write-Host ${env:KEYVAULTNAME}
+        Write-Host ${env:ADOTOKENNAME}
         $tokenValue = Get-AzKeyVaultSecret -VaultName ${env:KEYVAULTNAME} -Name ${env:ADOTOKENNAME} -AsPlainText
-        Write-Host "##vso[task.setvariable variable=token;issecret=true]tokenValue"       
+        Write-Host "##vso[task.setvariable variable=token;issecret=true]$tokenValue"       
       azurePowerShellVersion: 'LatestVersion'
-    displayName: Update fabricbot.json file locally try
+    displayName: 1Update fabricbot.json file locally try
   - pwsh: |
       Write-Host $(token)
       ./tools/Github/ParseWiki2Json.ps1 -ADOToken $(token)

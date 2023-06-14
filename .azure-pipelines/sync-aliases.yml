@@ -42,11 +42,15 @@ jobs:
       Inline: |
         dir env: 
         $tokenValue = Get-AzKeyVaultSecret -VaultName ${env:KEYVAULTNAME} -Name ${env:ADOTOKENNAME} -AsPlainText
-        Write-Host $tokenValue
-        ./tools/Github/ParseWiki2Json.ps1 -ADOToken $tokenValue
+        Write-Host "##vso[task.setvariable variable=token;issecret=true]tokenValue"
+        Write-Host $token
+        
       azurePowerShellVersion: 'LatestVersion'
     displayName: Update fabricbot.json file locally try
-      
+  - pwsh: |
+      Write-Host $token
+      ./tools/Github/ParseWiki2Json.ps1 -ADOToken $token
+    displayName: Update fabricbot.json file locally try2
   - pwsh: |
       git status
       $gitStatus = git status -s

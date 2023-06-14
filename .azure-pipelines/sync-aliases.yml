@@ -49,7 +49,7 @@ jobs:
     displayName: Update fabricbot.json file locally try
   - pwsh: |
       Write-Host $token
-      ./tools/Github/ParseWiki2Json.ps1 -ADOToken $token
+      ./tools/Github/ParseWiki2Json.ps1 -ADOToken $(token)
     displayName: Update fabricbot.json file locally try2
   - pwsh: |
       git status
